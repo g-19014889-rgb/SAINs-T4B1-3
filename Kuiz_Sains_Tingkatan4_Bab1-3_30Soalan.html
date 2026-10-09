@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuiz Sains Tingkatan 4 — Bab 1 hingga 3</title>
+<style>
+:root{--navy:#14213d;--blue:#2563eb;--teal:#0f766e;--bg:#f3f6fb;--card:#fff;--text:#172033;--muted:#64748b;--line:#dbe3ef}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--text);line-height:1.55}
+header{background:linear-gradient(130deg,#14213d,#1d4ed8);color:white;padding:28px 18px}
+.wrap{max-width:920px;margin:auto}.eyebrow{text-transform:uppercase;letter-spacing:1.5px;font-size:.78rem;opacity:.85}h1{margin:6px 0;font-size:clamp(1.5rem,4vw,2.3rem)}header p{margin:8px 0 0;opacity:.9}
+main{padding:20px 14px 45px}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.stat,.panel,.question{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px;box-shadow:0 4px 14px #0f172a08}
+.stat strong{display:block;font-size:1.35rem;color:var(--navy)}.stat span{font-size:.82rem;color:var(--muted)}
+.toolbar{display:flex;flex-wrap:wrap;gap:9px;align-items:center;justify-content:space-between;margin:16px 0}
+select,button{font:inherit;border-radius:10px;padding:10px 13px;border:1px solid var(--line);background:white;color:var(--text)}
+button{cursor:pointer;font-weight:700}button.primary{background:var(--blue);border-color:var(--blue);color:white}button.secondary{background:#e8eefc;color:#1d4ed8;border-color:#d4def9}button:disabled{opacity:.5;cursor:not-allowed}
+#questions{display:grid;gap:13px}.qhead{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:7px}.tag{background:#e7efff;color:#1d4ed8;padding:3px 8px;border-radius:999px;font-size:.75rem;font-weight:bold}.num{color:var(--muted);font-size:.85rem}.qtext{font-weight:700;margin:7px 0 12px}
+.option{display:flex;align-items:flex-start;gap:9px;padding:9px 10px;margin:6px 0;border:1px solid var(--line);border-radius:10px;cursor:pointer}.option:hover{background:#f8faff}.option input{margin-top:5px;accent-color:var(--blue)}.option.correct{border-color:#16a34a;background:#f0fdf4}.option.wrong{border-color:#dc2626;background:#fef2f2}
+.feedback{display:none;margin-top:10px;padding:10px 12px;border-radius:10px;background:#f1f5f9;font-size:.92rem}.feedback.show{display:block}.feedback strong{display:block;margin-bottom:3px}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin:18px 0}.result{display:none;margin:18px 0;background:white;border:2px solid #bfdbfe;border-radius:16px;padding:20px}.result.show{display:block}.score{font-size:2rem;font-weight:800;color:var(--blue)}
+footer{text-align:center;color:var(--muted);font-size:.82rem;padding:12px}
+@media(max-width:540px){.summary{grid-template-columns:1fr 1fr}.stat:last-child{grid-column:span 2}.toolbar{align-items:stretch}.toolbar select{width:100%}.actions button{flex:1}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="eyebrow">Latihan Interaktif • Aras Sederhana</div><h1>Kuiz Sains Tingkatan 4</h1><p>Bab 1: Langkah Keselamatan di dalam Makmal · Bab 2: Bantuan Kecemasan · Bab 3: Teknik Mengukur Parameter Kesihatan Badan</p></div></header>
+<main class="wrap">
+<div class="summary">
+ <div class="stat"><strong>30</strong><span>Soalan objektif</span></div>
+ <div class="stat"><strong>3</strong><span>Bab · 10 soalan setiap bab</span></div>
+ <div class="stat"><strong id="progress">0/30</strong><span>Soalan dijawab</span></div>
+</div>
+<div class="panel"><strong>Arahan:</strong> Pilih satu jawapan bagi setiap soalan. Tekan <em>Semak Jawapan</em> untuk melihat markah, jawapan betul dan penerangan.</div>
+<div class="toolbar">
+ <label for="filter"><strong>Papar soalan:</strong>
+ <select id="filter"><option value="all">Semua bab (30)</option><option value="1">Bab 1 — Keselamatan Makmal</option><option value="2">Bab 2 — Bantuan Kecemasan</option><option value="3">Bab 3 — Parameter Kesihatan</option></select></label>
+ <button class="secondary" id="resetTop">Mula Semula</button>
+</div>
+<div id="questions"></div>
+<div class="actions"><button class="primary" id="check">Semak Jawapan</button><button id="reset">Mula Semula</button></div>
+<div id="result" class="result" aria-live="polite"></div>
+</main>
+<footer>Dibina berdasarkan topik Bab 1–3 dalam PDF T4B1-3.pdf yang dimuat naik.</footer>
+<script>
+const data = [
+{b:1,q:"Apakah fungsi utama gogal semasa menjalankan eksperimen?",o:["Melindungi mata daripada percikan bahan kimia dan serpihan","Melindungi tangan daripada bahan mengakis","Menghalang penyedutan semua gas","Menggantikan keperluan memakai baju makmal"],a:0,e:"Gogal melindungi mata daripada percikan bahan kimia berbahaya, serpihan dan bahan yang boleh merengsakan mata."},
+{b:1,q:"Seorang murid mengendalikan bahan kimia yang boleh merengsakan kulit. Peralatan perlindungan diri yang paling sesuai ialah…",o:["Kasut sekolah sahaja","Sarung tangan yang sesuai","Pembaris plastik","Termometer makmal"],a:1,e:"Sarung tangan yang sesuai membantu melindungi tangan daripada sentuhan bahan kimia berbahaya."},
+{b:1,q:"Bahan manakah yang boleh dibuang ke dalam singki mengikut panduan dalam buku teks?",o:["Minyak masak terpakai","Logam berat","Larutan berkepekatan rendah yang neutral dan tidak berbahaya, jika dibenarkan prosedur","Bahan radioaktif"],a:2,e:"Buku teks menyatakan bahan seperti cecair atau larutan berkepekatan rendah yang neutral, asid lemah dan alkali lemah boleh dibuang ke singki mengikut panduan yang ditetapkan."},
+{b:1,q:"Antara berikut, yang manakah tidak boleh dibuang ke dalam singki?",o:["Air biasa dalam kuantiti kecil","Larutan neutral yang dibenarkan","Larutan berkepekatan rendah yang tidak berbahaya","Pelarut organik dan bahan toksik"],a:3,e:"Pelarut organik, bahan toksik, logam berat dan bahan radioaktif tidak boleh dibuang ke dalam singki kerana boleh membahayakan hidupan dan alam sekitar."},
+{b:1,q:"Apakah tindakan pertama yang wajar dilakukan apabila termometer merkuri pecah di makmal?",o:["Menyentuh merkuri untuk mengumpulkannya","Segera memaklumkan guru atau pembantu makmal","Menyapu merkuri dengan tangan kosong","Membuang semua serpihan ke dalam singki"],a:1,e:"Maklumkan guru atau pembantu makmal dengan segera supaya kawasan dapat dikawal dan tumpahan diuruskan dengan selamat."},
+{b:1,q:"Apakah alat pemadam yang sesuai untuk kebakaran melibatkan peralatan elektrik?",o:["Air sahaja","Selimut basah sahaja","Karbon dioksida atau serbuk kering yang sesuai","Minyak masak"],a:2,e:"Karbon dioksida atau serbuk kering sesuai untuk kebakaran elektrik. Air boleh mengalirkan arus dan meningkatkan risiko renjatan."},
+{b:1,q:"Kebakaran melibatkan kain yang sedang dipakai seseorang. Apakah alat yang direka untuk membantu memadamkan api pada pakaian?",o:["Selimut kebakaran","Kabinet aliran laminar","Kebuk wasap","Pembilas mata"],a:0,e:"Selimut kebakaran boleh digunakan untuk menyelimutkan api pada pakaian dan membantu memadamkannya."},
+{b:1,q:"Apakah tujuan kabinet aliran laminar dalam makmal?",o:["Mengukur tekanan darah","Menyimpan semua sisa makanan","Memadamkan kebakaran kelas B","Mengurangkan risiko pencemaran semasa kerja mikrobiologi tertentu"],a:3,e:"Kabinet aliran laminar digunakan untuk membantu mengelakkan kontaminasi semasa aktiviti mikrobiologi tertentu."},
+{b:1,q:"Apakah tindakan yang betul jika bahan kimia terpercik ke dalam mata?",o:["Menggosok mata dengan kuat","Menggunakan pembilas mata dan memaklumkan guru dengan segera","Menutup mata dan menyambung eksperimen","Menyapu bahan peneutral tanpa arahan"],a:1,e:"Pembilas mata digunakan untuk membilas mata dengan segera; maklumkan guru dan ikut prosedur keselamatan makmal."},
+{b:1,q:"Mengapakah kawasan tumpahan bahan kimia perlu ditandakan sebagai kawasan larangan?",o:["Supaya murid lain dapat melihat warna bahan","Supaya eksperimen boleh diteruskan di situ","Untuk mengelakkan orang menghampiri tumpahan berbahaya","Untuk mempercepat penyejatan bahan kimia"],a:2,e:"Mengasingkan kawasan mengurangkan risiko orang tersentuh bahan kimia atau terdedah kepada bahaya."},
+{b:2,q:"Apakah maksud resusitasi kardiopulmonari (CPR)?",o:["Kaedah mengukur suhu badan","Bantuan kecemasan untuk membantu mengekalkan peredaran darah dan pernafasan apabila jantung terhenti","Kaedah merawat semua jenis luka","Teknik mengukur kadar denyutan nadi"],a:1,e:"CPR melibatkan tekanan dada dan, apabila sesuai serta dilakukan oleh orang terlatih, bantuan pernafasan untuk membantu mengekalkan aliran darah dan oksigen."},
+{b:2,q:"Seseorang rebah dan tidak memberikan respons. Apakah tindakan awal yang penting sebelum memberikan bantuan?",o:["Terus memberinya makanan","Meninggalkannya bersendirian","Memastikan kawasan selamat, memeriksa respons dan meminta bantuan kecemasan","Memaksanya berdiri"],a:2,e:"Pastikan keselamatan, periksa respons dan dapatkan bantuan kecemasan. Ikut panduan CPR semasa dan arahan petugas kecemasan."},
+{b:2,q:"Mengapakah tekanan dada dilakukan semasa CPR?",o:["Untuk membantu mengedarkan darah ke seluruh badan","Untuk menurunkan suhu badan dengan segera","Untuk menghentikan semua pergerakan tulang rusuk","Untuk mengukur tekanan darah"],a:0,e:"Tekanan dada membantu menghasilkan aliran darah ke organ penting apabila jantung tidak mengepam dengan berkesan."},
+{b:2,q:"Menurut panduan dalam buku teks, kadar tekanan dada CPR untuk orang dewasa ialah sekitar…",o:["20–30 tekanan seminit","50–60 tekanan seminit","70–80 tekanan seminit","100–120 tekanan seminit"],a:3,e:"Buku teks menyatakan tekanan dada dilakukan pada kadar kira-kira 100–120 tekanan seminit."},
+{b:2,q:"Apakah tujuan mendongakkan kepala dan mengangkat dagu ketika membuka saluran pernafasan?",o:["Menghentikan denyutan jantung","Membantu membuka saluran pernafasan","Mengukur kedalaman pernafasan","Menghalang darah mengalir ke otak"],a:1,e:"Teknik dongak kepala-angkat dagu membantu membuka saluran pernafasan supaya udara boleh masuk."},
+{b:2,q:"Apakah keadaan yang boleh menyebabkan seseorang memerlukan CPR?",o:["Luka kecil pada jari sahaja","Demam ringan tetapi sedar dan bernafas normal","Tidak sedarkan diri dan tidak bernafas secara normal","Terseliuh buku lali"],a:2,e:"CPR diperlukan apabila seseorang tidak responsif dan tidak bernafas secara normal, mengikut penilaian dan panduan kecemasan."},
+{b:2,q:"Apakah tujuan utama Heimlich Manoeuvre?",o:["Membantu mengeluarkan objek yang menyekat saluran pernafasan akibat tercekik","Mengukur kadar denyutan nadi","Merawat luka terbakar","Mengurangkan suhu badan"],a:0,e:"Heimlich Manoeuvre ialah teknik bantuan kecemasan bagi kes tercekik apabila saluran pernafasan tersumbat."},
+{b:2,q:"Seseorang yang tercekik tidak boleh bercakap atau batuk dan sukar bernafas. Apakah tindakan paling wajar?",o:["Memberinya minuman dengan segera","Menyuruhnya berbaring dan tidur","Memasukkan jari secara membuta tuli ke dalam mulut","Dapatkan bantuan kecemasan dan lakukan bantuan tercekik yang sesuai mengikut latihan"],a:3,e:"Ketidakupayaan bercakap atau batuk serta kesukaran bernafas menandakan tercekik yang serius. Dapatkan bantuan dan ikut prosedur yang betul."},
+{b:2,q:"Mengapakah CPR penting apabila jantung seseorang terhenti?",o:["Ia menjamin pesakit pulih serta-merta","Ia membantu mengekalkan bekalan darah beroksigen ke otak dan organ penting","Ia menggantikan semua rawatan hospital","Ia menghapuskan keperluan memanggil bantuan kecemasan"],a:1,e:"CPR boleh membantu mengekalkan aliran darah ke otak dan organ penting sementara menunggu bantuan kecemasan."},
+{b:2,q:"Jika seseorang tidak sedarkan diri tetapi bernafas secara normal, apakah tindakan yang patut diutamakan?",o:["Memberinya makanan","Melakukan Heimlich Manoeuvre tanpa sebab","Mendapatkan bantuan kecemasan, memantau pernafasan dan mengikut panduan pertolongan cemas","Membiarkannya tanpa pemantauan"],a:2,e:"Dapatkan bantuan kecemasan, pantau pernafasan dan ikuti panduan pertolongan cemas yang sesuai; jangan lakukan CPR jika pernafasan normal."},
+{b:3,q:"Alat manakah sesuai untuk mengukur suhu badan melalui dahi tanpa sentuhan?",o:["Termometer inframerah","Termometer makmal","Sfigmomanometer","Pita pengukur"],a:0,e:"Termometer inframerah mengukur suhu badan tanpa perlu bersentuhan dengan badan."},
+{b:3,q:"Mengapakah termometer klinik perlu dipastikan berada di bawah 35°C sebelum digunakan, mengikut prosedur buku teks?",o:["Supaya bacaan sentiasa melebihi 42°C","Supaya merkuri cepat tersejat","Supaya suhu bilik boleh diukur","Supaya bacaan suhu badan dapat diukur dalam julat yang sesuai"],a:3,e:"Prosedur menetapkan termometer klinik berada di bawah 35°C sebelum pengukuran supaya bacaan suhu badan boleh diambil dengan betul."},
+{b:3,q:"Apakah maksud kadar denyutan nadi?",o:["Bilangan nafas yang diambil dalam sehari","Bilangan denyutan jantung yang dirasai pada arteri dalam tempoh tertentu","Jumlah darah yang terdapat dalam badan","Tekanan yang dikenakan oleh darah pada dinding arteri"],a:1,e:"Kadar denyutan nadi ialah bilangan denyutan yang dapat dirasai pada arteri dalam satu minit."},
+{b:3,q:"Di manakah antara lokasi berikut denyutan nadi boleh dirasai dengan mudah?",o:["Pada kuku jari sahaja","Di tengah rambut kepala","Pada arteri di pergelangan tangan","Pada permukaan gigi"],a:2,e:"Denyutan nadi lazimnya boleh dirasai pada arteri di pergelangan tangan atau leher."},
+{b:3,q:"Seorang murid mengukur kadar denyutan nadi selepas berlari. Mengapakah bacaannya meningkat?",o:["Otot memerlukan lebih banyak oksigen dan nutrien, lalu jantung mengepam darah lebih cepat","Jantung berhenti mengepam darah buat sementara","Darah tidak lagi mengangkut oksigen","Aktiviti fizikal mengurangkan keperluan tenaga otot"],a:0,e:"Aktiviti fizikal meningkatkan keperluan oksigen dan tenaga otot, maka kadar denyutan nadi biasanya meningkat."},
+{b:3,q:"Apakah alat yang digunakan untuk mengukur tekanan darah?",o:["Termometer rektal","Jam randik sahaja","Penimbang badan","Sfigmomanometer"],a:3,e:"Tekanan darah diukur menggunakan sfigmomanometer, sama ada jenis digital atau manual."},
+{b:3,q:"Dalam bacaan tekanan darah 120/80 mmHg, nombor 120 merujuk kepada…",o:["Tekanan diastolik","Tekanan sistolik","Kadar denyutan nadi","Indeks jisim badan"],a:1,e:"Nombor atas ialah tekanan sistolik, iaitu tekanan ketika ventrikel mengecut."},
+{b:3,q:"Apakah yang dimaksudkan dengan tekanan diastolik?",o:["Tekanan ketika ventrikel mengecut","Bilangan denyutan jantung seminit","Tekanan dalam arteri ketika otot ventrikel mengendur","Suhu darah ketika berehat"],a:2,e:"Tekanan diastolik ialah tekanan darah dalam arteri ketika ventrikel mengendur antara denyutan."},
+{b:3,q:"Seorang murid mempunyai jisim 60 kg dan tinggi 1.5 m. Berapakah BMI murid itu?",o:["26.7 kg m⁻²","40.0 kg m⁻²","22.5 kg m⁻²","15.0 kg m⁻²"],a:0,e:"BMI = jisim ÷ (tinggi × tinggi) = 60 ÷ (1.5 × 1.5) = 26.7 kg m⁻²."},
+{b:3,q:"Mengikut jadual kategori BMI dalam PDF, BMI 18.5 hingga 24.9 kg m⁻² dikategorikan sebagai…",o:["Kurang jisim badan","Obes","Berlebihan jisim badan","Jisim badan unggul"],a:3,e:"Jadual dalam buku teks mengelaskan BMI 18.5–24.9 kg m⁻² sebagai jisim badan unggul."},
+{b:3,q:"Apakah amalan yang membantu mengekalkan parameter kesihatan badan yang baik?",o:["Mengelakkan semua aktiviti fizikal","Mengamalkan pemakanan seimbang, aktiviti fizikal dan pemeriksaan kesihatan yang sesuai","Mengambil makanan tinggi garam setiap hari","Mengabaikan bacaan tekanan darah yang luar biasa"],a:1,e:"Pemakanan seimbang, aktiviti fizikal dan pemantauan kesihatan membantu mengekalkan kesihatan badan."}
+];
+const labels=["A","B","C","D"]; let submitted=false;
+const root=document.getElementById("questions");
+function render(){
+ const f=document.getElementById("filter").value; root.innerHTML="";
+ data.forEach((q,i)=>{if(f!=="all"&&String(q.b)!==f)return;
+ const card=document.createElement("section");card.className="question";card.id="q"+i;
+ card.innerHTML=`<div class="qhead"><span class="tag">Bab ${q.b}</span><span class="num">Soalan ${i+1} daripada 30</span></div><div class="qtext">${q.q}</div><div class="options"></div><div class="feedback" id="fb${i}"></div>`;
+ const opts=card.querySelector(".options");
+ q.o.forEach((txt,j)=>{const lab=document.createElement("label");lab.className="option";lab.dataset.index=j;lab.innerHTML=`<input type="radio" name="q${i}" value="${j}" ${submitted?"disabled":""}><span><b>${labels[j]}.</b> ${txt}</span>`;lab.querySelector("input").addEventListener("change",updateProgress);opts.appendChild(lab)});
+ root.appendChild(card);
+ if(submitted) reveal(i,card);
+ });updateProgress();
+}
+function updateProgress(){let n=0;data.forEach((q,i)=>{if(document.querySelector(`input[name="q${i}"]:checked`))n++});document.getElementById("progress").textContent=n+"/30"}
+function reveal(i,card){const q=data[i],chosen=document.querySelector(`input[name="q${i}"]:checked`);card.querySelectorAll(".option").forEach((el,j)=>{if(j===q.a)el.classList.add("correct");if(chosen&&j===Number(chosen.value)&&j!==q.a)el.classList.add("wrong")});const fb=card.querySelector(".feedback");fb.classList.add("show");fb.innerHTML=`<strong>${chosen&&Number(chosen.value)===q.a?"Betul!":chosen?"Belum tepat. Jawapan: "+labels[q.a]:"Belum dijawab. Jawapan: "+labels[q.a]}</strong>${q.e}`}
+function checkAnswers(){if(submitted)return;submitted=true;let score=0,answered=0;data.forEach((q,i)=>{const chosen=document.querySelector(`input[name="q${i}"]:checked`);if(chosen){answered++;if(Number(chosen.value)===q.a)score++}const card=document.getElementById("q"+i);if(card)reveal(i,card)});const r=document.getElementById("result");r.className="result show";r.innerHTML=`<div>Keputusan kuiz</div><div class="score">${score} / 30</div><p>Jawapan dijawab: ${answered}/30 · Peratus: ${Math.round(score/30*100)}%</p><p>${score>=25?"Cemerlang! Penguasaan anda sangat baik.":score>=18?"Baik! Semak semula penerangan untuk soalan yang salah.":"Teruskan ulang kaji setiap bab dan cuba lagi."}</p>`;document.getElementById("check").disabled=true;document.getElementById("check").textContent="Jawapan telah disemak";r.scrollIntoView({behavior:"smooth",block:"center"})}
+function resetQuiz(){submitted=false;document.getElementById("filter").value="all";document.getElementById("result").className="result";document.getElementById("result").innerHTML="";document.getElementById("check").disabled=false;document.getElementById("check").textContent="Semak Jawapan";render();window.scrollTo({top:0,behavior:"smooth"})}
+document.getElementById("filter").addEventListener("change",render);document.getElementById("check").addEventListener("click",checkAnswers);document.getElementById("reset").addEventListener("click",resetQuiz);document.getElementById("resetTop").addEventListener("click",resetQuiz);render();
+</script>
+</body>
+</html>
